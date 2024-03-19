@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Timeplanner.Core.Implementations;
 using TimePlanner.Domain.Interfaces;
 using TimePlanner.Domain.Models;
 using TimePlanner.Infrastructure;
@@ -29,7 +30,7 @@ namespace TimePlanner.WebApi.Controllers
         public async Task<ActionResult> Get(Guid id)
         {
             var result = await this.goalCategoriesRepository.GetAllAsync(x => x.Id == id);
-            if (result.Any())
+            if (result.Result.Any())
                 return Ok(result);
 
             return BadRequest($"Категория цели с таким id={id} не найдена!");
@@ -46,7 +47,7 @@ namespace TimePlanner.WebApi.Controllers
 
             var result = await this.goalCategoriesRepository.AddCategory(category);
 
-            return Created($"{this.HttpContext.Request.PathBase}/api/categories/{result}", null);
+            return Created($"{this.HttpContext.Request.PathBase}/api/categories/{result.Result}", null);
         }
 
         // PUT api/<CategoriesController>/5
@@ -58,8 +59,9 @@ namespace TimePlanner.WebApi.Controllers
                 return BadRequest("Категория не передана или её имя пустое");
             }
 
-            //Здесь нужно обработать вариант, что такого id нет
-            await this.goalCategoriesRepository.EditCategory(category);
+            var result = await this.goalCategoriesRepository.EditCategory(category);
+            if (result is ElementNotFound error)
+                return BadRequest(error.ErrorMessage);
 
             return Ok();
         }
@@ -68,8 +70,9 @@ namespace TimePlanner.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            //Здесь нужно обработать вариант, что такого id нет
-            await this.goalCategoriesRepository.DeleteCategory(id);
+            var result = await this.goalCategoriesRepository.DeleteCategory(id);
+            if (result is ElementNotFound error)
+                return BadRequest(error.ErrorMessage);
 
             return Ok();
         }

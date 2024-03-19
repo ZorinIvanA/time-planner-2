@@ -7,6 +7,8 @@ using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Timeplanner.Core.Implementations;
+using Timeplanner.Core.Interfaces;
 using TimePlanner.Domain.Interfaces;
 using TimePlanner.Domain.Models;
 
@@ -23,7 +25,7 @@ namespace TimePlanner.Infrastructure
                 throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task<Guid> AddCategory(GoalCategory category)
+        public async Task<IOperationResult<Guid>> AddCategory(GoalCategory category)
         {
             if (category == null)
                 throw new ArgumentNullException(nameof(category));
@@ -31,21 +33,23 @@ namespace TimePlanner.Infrastructure
             var id = Guid.NewGuid();
             await this.ExecuteNonQueryAsync($"INSERT INTO [GoalsCategories] (id, name) VALUES ('{id}','{category.Name}')");
 
-            return id;
+            return new Success<Guid>(id);
         }
 
-        public async Task DeleteCategory(Guid id)
+        public async Task<IOperationResult> DeleteCategory(Guid id)
         {
             var existing = (await this.ExecuteQueryAsync($"SELECT * FROM [GoalsCategories] WHERE id='{id}'"))
                 .FirstOrDefault();
 
             if (existing == null)
-                throw new NotImplementedException("Заменить на нормальную обработку отсутствия");
+                return new ElementNotFound($"Не найдена категория с id {id}");
 
             await this.ExecuteNonQueryAsync($"DELETE FROM [GoalsCategories] WHERE id='{id}'");
+
+            return new Success();
         }
 
-        public async Task EditCategory(GoalCategory category)
+        public async Task<IOperationResult> EditCategory(GoalCategory category)
         {
             if (category == null)
                 throw new ArgumentNullException(nameof(category));
@@ -54,22 +58,24 @@ namespace TimePlanner.Infrastructure
                 .FirstOrDefault();
 
             if (existing == null)
-                throw new NotImplementedException("Заменить на нормальную обработку отсутствия");
+                return new ElementNotFound($"Не найдена категория с id {category.Id}");
 
             existing.Name = category.Name;
 
             await this.ExecuteNonQueryAsync($"UPDATE [GoalsCategories] SET Name='{existing.Name}' WHERE id= '{existing.Id}'");
+
+            return new Success();
         }
 
 
-        public async Task<IEnumerable<GoalCategory>> GetAllAsync(Func<GoalCategory, bool> selectFunc = null)
+        public async Task<IOperationResult<IEnumerable<GoalCategory>>> GetAllAsync(Func<GoalCategory, bool> selectFunc = null)
         {
             var result = await this.ExecuteQueryAsync("SELECT * FROM [GoalsCategories]");
 
             if (selectFunc != null)
-                return result;
+                return new Success<IEnumerable<GoalCategory>>(result);
 
-            return result.Where(selectFunc);
+            return new Success<IEnumerable<GoalCategory>>(result.Where(selectFunc));
         }
 
         private async Task ExecuteNonQueryAsync(string sql)

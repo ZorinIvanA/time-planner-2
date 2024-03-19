@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timeplanner.Core.Interfaces;
 using TimePlanner.Domain.Models;
 
 namespace TimePlanner.Domain.Interfaces
@@ -15,23 +16,23 @@ namespace TimePlanner.Domain.Interfaces
         /// <summary>
         /// Возвращает список всех категорий, соответствующих условию, заданному функцией
         /// </summary>
-        Task<IEnumerable<GoalCategory>> GetAllAsync(Func<GoalCategory, bool> selectFunc = null);
+        Task<IOperationResult<IEnumerable<GoalCategory>>> GetAllAsync(Func<GoalCategory, bool> selectFunc = null);
         /// <summary>
         /// Добавляет категорию цели из переданного параметра
         /// </summary>
         /// <param name="category">Категория цели</param>
-        Task<Guid> AddCategory(GoalCategory category);
+        Task<IOperationResult<Guid>> AddCategory(GoalCategory category);
 
         /// <summary>
         /// Изменяет категорию цели данными из переданного параметра
         /// </summary>
         /// <param name="category">Данные для изменения категории цели</param>
-        Task EditCategory(GoalCategory category);
+        Task<IOperationResult>EditCategory(GoalCategory category);
 
         /// <summary>
         /// Удаляет категорию цели с переданным id
         /// </summary>
         /// <param name="id">Id категории цели, которую надо удалить</param>
-        Task DeleteCategory(Guid id);
+        Task<IOperationResult> DeleteCategory(Guid id);
     }
 }
