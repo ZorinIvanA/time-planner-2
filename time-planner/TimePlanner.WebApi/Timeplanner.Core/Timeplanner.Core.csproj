@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Timeplanner.Core\Timeplanner.Core.csproj" />
-  </ItemGroup>
-
 </Project>
