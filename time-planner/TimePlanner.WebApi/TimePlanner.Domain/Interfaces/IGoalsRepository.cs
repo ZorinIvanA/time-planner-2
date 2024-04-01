@@ -7,10 +7,21 @@ using TimePlanner.Domain.Models;
 
 namespace TimePlanner.Domain.Interfaces
 {
+    /// <summary>
+    /// Репозиторий целей
+    /// </summary>
     public interface IGoalsRepository
     {
-        Task<IEnumerable<Goal>> GetGoalsById(params Guid[] ids);
+        /// <summary>
+        /// Возвращает список целей по предикату
+        /// </summary>
+        /// <param name="ids"></param>        
+        Task<IEnumerable<Goal>> GetGoalsById(Func<Goal, bool> selectFunc);
 
+        /// <summary>
+        /// Изменяет заданную цель
+        /// </summary>
+        /// <param name="goal">Цель, содержащая все изменения и id изменяемой цели в БД</param>
         Task UpdateGoal(Goal goal);
     }
 }

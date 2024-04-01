@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TimePlanner.Domain.Interfaces;
-using TimePlanner.Domain.SuccessCodes;
 using TimePlanner.Domain.Models;
+using Timeplanner.Core.Implementations;
 
 namespace TimePlanner.WebApi.Controllers
 {
@@ -9,12 +9,12 @@ namespace TimePlanner.WebApi.Controllers
     [ApiController]
     public class GoalsController : ControllerBase
     {
-        IGoalsService goalsService;
+        IGoalsRepository goalsRepository;
 
-        public GoalsController(IGoalsService goalsService)
+        public GoalsController(IGoalsRepository goalsRepository)
         {
-            this.goalsService = goalsService ??
-                throw new ArgumentNullException(nameof(goalsService));
+            this.goalsRepository = goalsRepository ??
+                throw new ArgumentNullException(nameof(goalsRepository));
         }
 
         [HttpPost("complete")]
@@ -22,15 +22,15 @@ namespace TimePlanner.WebApi.Controllers
         {
             try
             {
-                await this.goalsService.CompleteGoal(goalId);
+                var goals = await this.goalsRepository.GetGoalsById(x => x.Id == goalId);
+                if (!goals.Any())
+                    return BadRequest($"Цель c id {goalId} не найдена");
 
-                var completeResult = await this.goalsService.CompleteGoal(goalId);
-
-                if (completeResult is ElementNotFound<Goal>)
-                    return BadRequest("Цель не найдена");
+                var goal = goals.Single();
+                var completeResult = await goal.CompleteAsync();
 
                 if (completeResult is ConflictResult<Goal> conflict)
-                    return BadRequest(conflict.Message);
+                    return BadRequest(conflict.ErrorMessage);
 
                 if (completeResult is Success)
                     return Ok();
