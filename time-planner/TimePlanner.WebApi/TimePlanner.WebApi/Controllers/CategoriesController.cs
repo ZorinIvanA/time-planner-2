@@ -22,7 +22,7 @@ namespace TimePlanner.WebApi.Controllers
         // GET: api/<CategoriesController>
         [HttpGet]
         public async Task<ActionResult> Get() =>
-            Ok(await this.goalCategoriesRepository.GetAllAsync());
+            Ok(await this.goalCategoriesRepository.GetAllAsync(x => true));
 
 
         // GET api/<CategoriesController>/5

@@ -15,3 +15,21 @@ System.NotImplementedException: The method or operation is not implemented.
    at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
    at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
    at TimePlanner.WebApi.ExceptionMiddleware.InvokeAsync(HttpContext context, RequestDelegate next) in C:\Users\izorin\source\repos\time-planner-2\time-planner\TimePlanner.WebApi\TimePlanner.WebApi\ExceptionMiddleware.cs:line 16
+2024-03-30 13:34:50.503 +03:00 [Error] Value cannot be null. (Parameter 'predicate')
+System.ArgumentNullException: Value cannot be null. (Parameter 'predicate')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Where[TSource](IEnumerable`1 source, Func`2 predicate)
+   at TimePlanner.Infrastructure.GoalsCategoriesRepository.GetAllAsync(Func`2 selectFunc) in C:\Users\izorin\source\repos\time-planner-2\time-planner\TimePlanner.WebApi\TimePlanner.Infrastructure\GoalsCategoriesRepository.cs:line 78
+   at TimePlanner.WebApi.Controllers.CategoriesController.Get() in C:\Users\izorin\source\repos\time-planner-2\time-planner\TimePlanner.WebApi\TimePlanner.WebApi\Controllers\CategoriesController.cs:line 25
+   at lambda_method5(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at TimePlanner.WebApi.ExceptionMiddleware.InvokeAsync(HttpContext context, RequestDelegate next) in C:\Users\izorin\source\repos\time-planner-2\time-planner\TimePlanner.WebApi\TimePlanner.WebApi\ExceptionMiddleware.cs:line 16
