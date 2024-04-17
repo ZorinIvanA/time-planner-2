@@ -21,6 +21,7 @@ namespace TimePlanner.Domain.Models
         public Guid Id { get; set; }
         public DateTime? CompletedDate { get; set; }
         public bool IsCompleted => this.CompletedDate.HasValue;
+        public string Name { get; set; }
 
         public async Task<IOperationResult> CompleteAsync(DateTime? completeDate = null)
         {
