@@ -1,3 +1,8 @@
+create database [time_planner]
+go
+
+use [time_planner]
+
 create table goals_users(
 	id uniqueidentifier,
 	login nvarchar(255),
