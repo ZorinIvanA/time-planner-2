@@ -11,29 +11,38 @@ namespace TimePlanner.Domain.Models
 {
     public class Goal
     {
-        IGoalsRepository goalsRepository;
-
-        public Goal(IGoalsRepository repository)
-        {
-            this.goalsRepository = repository ?? throw new ArgumentNullException(nameof(repository));
-        }
-
+        /// <summary>
+        /// Id цели
+        /// </summary>
         public Guid Id { get; set; }
+        /// <summary>
+        /// Дата, к которой цель должна быть выполнена
+        /// </summary>
+        public DateTime DateToComplete { get; set; }
+
+        /// <summary>
+        /// Дата выполнения цели
+        /// </summary>
         public DateTime? CompletedDate { get; set; }
+        /// <summary>
+        /// Выполнена ли цель в настоящий момент
+        /// </summary>
         public bool IsCompleted => this.CompletedDate.HasValue;
+        /// <summary>
+        /// Краткое название цели
+        /// </summary>
         public string Name { get; set; }
-
-        public async Task<IOperationResult> CompleteAsync(DateTime? completeDate = null)
-        {
-            if (this.IsCompleted)
-                return new ConflictResult("Цель уже выполнена!");
-
-            if (completeDate.HasValue)
-                this.CompletedDate = completeDate.Value;
-
-            await this.goalsRepository.UpdateGoal(this);
-
-            return new Success();
-        }
+        /// <summary>
+        /// Описание цели
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// Родительская цель
+        /// </summary>
+        public Guid? ParentId { get; set; }
+        /// <summary>
+        /// Период цели
+        /// </summary>
+        public TrackingPeriod Period { get; set; }
     }
 }

@@ -8,15 +8,24 @@ using TimePlanner.Domain.Models;
 
 namespace TimePlanner.Infrastructure.EFCore.DTO
 {
-    public class GoalDto
+    internal class GoalDto
     {
         [Required]
-        public Guid Id { get; set; }
-        public DateTime? CompletedDate { get; set; }
+        internal Guid Id { get; set; }
+        internal DateTime? CompletedDate { get; set; }
         [Required]
-        public string Name { get; set; }
+        internal DateTime DateToComplete { get; set; }
+        [Required]
+        internal string Name { get; set; }
+        internal string Description { get; set; }
+        internal Guid? Parent { get; set; }
+        [Required]
+        internal PeriodDto Period { get; set; }
+        [Required]
+        internal Guid UserId { get; set; }
+        internal GoalCategoryDto Category { get; set; }
 
-        public GoalDto(Goal goal)
+        internal GoalDto(Goal goal)
         {
             if (goal == null) throw new ArgumentNullException(nameof(goal));
 

@@ -1,7 +1,8 @@
 using TimePlanner.Domain.Interfaces;
-using TimePlanner.Infrastructure;
 using Serilog;
 using TimePlanner.WebApi;
+using TimePlanner.Infrastructure.Repositories;
+using TimePlanner.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IGoalCategoriesRepository, GoalsCategoriesRepository>();
+builder.Services.AddScoped<IGoalsRepository, GoalsRepository>();
+builder.Services.AddScoped<IGoalsService, GoalsService>();
 builder.Services.AddSingleton<ExceptionMiddleware>();
 
 var app = builder.Build();

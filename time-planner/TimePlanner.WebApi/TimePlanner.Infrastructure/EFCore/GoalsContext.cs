@@ -1,21 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 using TimePlanner.Infrastructure.EFCore.DTO;
 
 namespace TimePlanner.Infrastructure.EFCore
 {
-    public class GoalsContext : DbContext
+    internal class GoalsContext : DbContext
     {
-        public DbSet<GoalDto> Goals { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("server=.;database=time-planner;");
-        }
+        internal DbSet<GoalDto> Goals { get; set; }
+        internal DbSet<GoalCategoryDto> GoalsCategories { get; set; }
+        internal DbSet<PeriodDto> Periods { get; set; } 
     }
 }
