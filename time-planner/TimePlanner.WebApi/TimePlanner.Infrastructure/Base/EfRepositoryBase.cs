@@ -13,7 +13,6 @@ namespace TimePlanner.Infrastructure.Base
         where TMapper : class
     {
         protected GoalsContext context;
-
         protected EfRepositoryBase()
         {
             this.context = new GoalsContext();

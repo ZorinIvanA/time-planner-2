@@ -21,7 +21,6 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.RollingFile("test")
     .CreateLogger();
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
