@@ -31,20 +31,20 @@ namespace TimePlanner.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(category));
 
             var id = Guid.NewGuid();
-            await ExecuteNonQueryAsync($"INSERT INTO [GoalsCategories] (id, name) VALUES ('{id}','{category.Name}')");
+            await ExecuteNonQueryAsync($"INSERT INTO [goals_categories] (id, name) VALUES ('{id}','{category.Name}')");
 
             return new Success<Guid>(id);
         }
 
         public async Task<IOperationResult> DeleteCategory(Guid id)
         {
-            var existing = (await ExecuteQueryAsync($"SELECT * FROM [GoalsCategories] WHERE id='{id}'"))
+            var existing = (await ExecuteQueryAsync($"SELECT * FROM [goals_categories] WHERE id='{id}'"))
                 .FirstOrDefault();
 
             if (existing == null)
                 return new ElementNotFound($"Не найдена категория с id {id}");
 
-            await ExecuteNonQueryAsync($"DELETE FROM [GoalsCategories] WHERE id='{id}'");
+            await ExecuteNonQueryAsync($"DELETE FROM [goals_categories] WHERE id='{id}'");
 
             return new Success();
         }
@@ -54,7 +54,7 @@ namespace TimePlanner.Infrastructure.Repositories
             if (category == null)
                 throw new ArgumentNullException(nameof(category));
 
-            var existing = (await ExecuteQueryAsync($"SELECT * FROM [GoalsCategories] WHERE id='{category.Id}'"))
+            var existing = (await ExecuteQueryAsync($"SELECT * FROM [goals_categories] WHERE id='{category.Id}'"))
                 .FirstOrDefault();
 
             if (existing == null)
@@ -62,7 +62,7 @@ namespace TimePlanner.Infrastructure.Repositories
 
             existing.Name = category.Name;
 
-            await ExecuteNonQueryAsync($"UPDATE [GoalsCategories] SET Name='{existing.Name}' WHERE id= '{existing.Id}'");
+            await ExecuteNonQueryAsync($"UPDATE [goals_categories] SET Name='{existing.Name}' WHERE id= '{existing.Id}'");
 
             return new Success();
         }
@@ -70,7 +70,7 @@ namespace TimePlanner.Infrastructure.Repositories
 
         public async Task<IOperationResult<IEnumerable<GoalCategory>>> GetAllAsync(Func<GoalCategory, bool> selectFunc = null)
         {
-            var result = await ExecuteQueryAsync("SELECT * FROM [GoalsCategories]");
+            var result = await ExecuteQueryAsync("SELECT * FROM [goals_categories]");
 
             if (selectFunc != null)
                 return new Success<IEnumerable<GoalCategory>>(result);

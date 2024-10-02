@@ -1,21 +1,25 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TimePlanner.Infrastructure.EFCore;
+using TimePlanner.Infrastructure.Interfaces;
 
 namespace TimePlanner.Infrastructure.Base
 {
-    internal abstract class EfRepositoryBase<TDto, TModel, TMapper>
-        where TDto : DtoBase
+    public abstract class EfRepositoryBase<TDto, TModel, TMapper>
+        where TDto : class, new()
         where TModel : class, new()
-        where TMapper : class
+        where TMapper : IMapper<TDto, TModel>
     {
         protected GoalsContext context;
-        protected EfRepositoryBase()
+        protected TMapper mapper;
+        protected EfRepositoryBase(GoalsContext context)
         {
-            this.context = new GoalsContext();
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.mapper = this.GetMapper();
         }
 
         /// <summary>
@@ -30,5 +34,10 @@ namespace TimePlanner.Infrastructure.Base
             int pageSize,
             int currentPage,
             CancellationToken cancellationToken);
+
+        /// <summary>
+        /// При переопределении в классе-наследнике возвращает необходимый инстанс маппера
+        /// </summary>
+        protected abstract TMapper GetMapper();
     }
 }

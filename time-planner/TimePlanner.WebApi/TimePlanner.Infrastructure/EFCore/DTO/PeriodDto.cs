@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TimePlanner.Infrastructure.EFCore.DTO
 {
-    internal class PeriodDto
+    [Table("goals_periods")]
+    public class PeriodDto
     {
         [Required]
-        internal Guid Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
         [Required]
-        internal string Name { get; set; }
+        public string Name { get; set; }
         [Required]
-        internal DateTime StartDate { get; set; }
-        internal DateTime EndDate { get; set; }
+        [Column("start_date")]
+        public DateTime StartDate { get; set; }
+        [Column("end_date")]
+        public DateTime EndDate { get; set; }
         [Required]
-        internal Guid UserId { get; set; }
+        [Column("user")]
+        public Guid UserId { get; set; }
     }
 }

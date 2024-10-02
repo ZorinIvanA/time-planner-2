@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 using TimePlanner.Domain.Interfaces;
 using TimePlanner.Domain.Models;
 using TimePlanner.Infrastructure.EFCore.DTO;
+using TimePlanner.Infrastructure.Interfaces;
 
 namespace TimePlanner.Infrastructure.Mappers
 {
-    internal class GoalsMapper
+    public class GoalsMapper : IMapper<GoalDto, Goal>
     {
-        IGoalsRepository repository;
 
-        public GoalsMapper(IGoalsRepository repository)
+        public GoalsMapper()
         {
-            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public Goal MapFromModel(GoalDto dto)
+        public Goal FromDto(GoalDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
 
-            var peiodMapper = new PeriodMapper();
+            var peiodMapper = new PeriodMapper(); //TODO: переделать на DI
             return new Goal()
             {
                 CompletedDate = dto.CompletedDate,
@@ -31,8 +30,13 @@ namespace TimePlanner.Infrastructure.Mappers
                 Id = dto.Id,
                 Name = dto.Name,
                 ParentId = dto.Parent,
-                Period = peiodMapper.MapFromDto(dto.Period)
+                Period = peiodMapper.FromDto(dto.Period)
             };
+        }
+
+        public GoalDto ToDto(Goal entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

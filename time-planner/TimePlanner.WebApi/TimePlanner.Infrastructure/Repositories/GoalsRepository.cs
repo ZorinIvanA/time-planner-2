@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,20 +8,23 @@ using Timeplanner.Core.Implementations;
 using Timeplanner.Core.Interfaces;
 using TimePlanner.Domain.Interfaces;
 using TimePlanner.Domain.Models;
+using TimePlanner.Infrastructure.Base;
 using TimePlanner.Infrastructure.EFCore;
 using TimePlanner.Infrastructure.EFCore.DTO;
 using TimePlanner.Infrastructure.Mappers;
 
 namespace TimePlanner.Infrastructure.Repositories
 {
-    public class GoalsRepository : IGoalsRepository
+    public class GoalsRepository : EfRepositoryBase<GoalDto, Goal, GoalsMapper>, IGoalsRepository
     {
-        GoalsContext context = new GoalsContext();
+        public GoalsRepository(GoalsContext context) : base(context)
+        {
 
+        }
         public Task<IOperationResult<IQueryable<Goal>>> GetGoalsByIdsAsync(params Guid[] ids)
         {
             var dtos = this.context.Goals.Where(x => ids.Any(y => y == x.Id))
-                .Select(x => this.MapFromDto(x));
+                .Select(x => this.mapper.FromDto(x));
 
             return Task.FromResult(new Success<IQueryable<Goal>>(dtos) as IOperationResult<IQueryable<Goal>>);
         }
@@ -34,7 +38,7 @@ namespace TimePlanner.Infrastructure.Repositories
                 return new ElementNotFound($"Цель с id {goal.Id} не найдена!");
 
             foundGoal.DateToComplete = goal.DateToComplete;
-            foundGoal.CompletedDate = goal.CompletedDate;            
+            foundGoal.CompletedDate = goal.CompletedDate;
             foundGoal.Description = goal.Description;
             foundGoal.Name = goal.Name;
 
@@ -43,18 +47,14 @@ namespace TimePlanner.Infrastructure.Repositories
             return new Success();
         }
 
-        private GoalDto MapFromDomain(Goal goal) => new GoalDto(goal);
-
-        private Goal MapFromDto(GoalDto dto)
+        protected override IQueryable<GoalDto> GetDataInternalAsync(Func<GoalDto, bool> selectFunc, int pageSize, int currentPage, CancellationToken cancellationToken)
         {
-            return new Goal
-            {
-                CompletedDate = dto.CompletedDate,
-                DateToComplete = dto.DateToComplete,
-                Description = dto.Description,
-                Name = dto.Name,
-                Id = dto.Id
-            };
+            throw new NotImplementedException();
+        }
+
+        protected override GoalsMapper GetMapper()
+        {
+            return new GoalsMapper();
         }
     }
 }

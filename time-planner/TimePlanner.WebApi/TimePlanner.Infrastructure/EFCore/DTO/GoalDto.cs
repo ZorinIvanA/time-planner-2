@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,30 +10,22 @@ using TimePlanner.Domain.Models;
 
 namespace TimePlanner.Infrastructure.EFCore.DTO
 {
-    internal class GoalDto
+    [Table("goals")]
+    [PrimaryKey(nameof(Id))]
+    public class GoalDto
     {
+        public Guid Id { get; set; }
+        public DateTime? CompletedDate { get; set; }
         [Required]
-        internal Guid Id { get; set; }
-        internal DateTime? CompletedDate { get; set; }
+        public DateTime DateToComplete { get; set; }
         [Required]
-        internal DateTime DateToComplete { get; set; }
-        [Required]
-        internal string Name { get; set; }
-        internal string Description { get; set; }
-        internal Guid? Parent { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public Guid? Parent { get; set; }
         [Required]
         internal PeriodDto Period { get; set; }
         [Required]
-        internal Guid UserId { get; set; }
-        internal GoalCategoryDto Category { get; set; }
-
-        internal GoalDto(Goal goal)
-        {
-            if (goal == null) throw new ArgumentNullException(nameof(goal));
-
-            this.Id = goal.Id;
-            this.CompletedDate = goal.CompletedDate;
-            this.Name = goal.Name;
-        }
+        public Guid UserId { get; set; }
+        public GoalCategoryDto Category { get; set; }
     }
 }
