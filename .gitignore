@@ -397,3 +397,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /time-planner/TimePlanner.WebApi/TimePlanner.WebApi/test-20240302
+/client/time-planner-client/.vscode
